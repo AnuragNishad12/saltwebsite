@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 
 export default function ResponsiveCategoryNavigation() {
+
+
+
+  
   // Sample categories - replace with your actual data
   const categories = [
     { id: 1, name: 'Audio & Tech Gear' },
