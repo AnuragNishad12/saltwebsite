@@ -65,9 +65,65 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Right Side - Black Section */}
-                <div className="w-full md:w-1/2 bg-black h-16 md:h-auto">
-                    {/* Content for the black section */}
+                {/* Right Side - Professional Black Section */}
+                <div className="w-full md:w-1/2 bg-black">
+                    {/* Mobile black navbar (collapses) */}
+                    <div className={`${isMenuOpen ? 'flex' : 'hidden'} md:hidden flex-col space-y-2 py-4 px-6`}>
+                        <a href="#" className="text-gray-300 hover:text-white text-sm font-medium flex items-center py-2 transition duration-200">
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            Shop or Products
+                        </a>
+                        <a href="#" className="text-gray-300 hover:text-white text-sm font-medium flex items-center py-2 transition duration-200">
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            Deals / Offers
+                        </a>
+                        <a href="#" className="text-gray-300 hover:text-white text-sm font-medium flex items-center py-2 transition duration-200">
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            About Us
+                        </a>
+                        <a href="#" className="text-gray-300 hover:text-white text-sm font-medium flex items-center py-2 transition duration-200">
+                            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Contact Us
+                        </a>
+                    </div>
+                    
+                    {/* Desktop black navbar */}
+                    <div className="hidden md:flex items-center justify-center h-full">
+                        <div className="flex items-center space-x-8 lg:space-x-12 px-4">
+                            <a href="#" className="text-gray-300 hover:text-white flex items-center py-6 border-b-2 border-transparent hover:border-white text-sm lg:text-base font-medium transition duration-200">
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                Shop or Products
+                            </a>
+                            <a href="#" className="text-gray-300 hover:text-white flex items-center py-6 border-b-2 border-transparent hover:border-white text-sm lg:text-base font-medium transition duration-200">
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                </svg>
+                                Deals / Offers
+                            </a>
+                            <a href="#" className="text-gray-300 hover:text-white flex items-center py-6 border-b-2 border-transparent hover:border-white text-sm lg:text-base font-medium transition duration-200">
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                About Us
+                            </a>
+                            <a href="#" className="text-gray-300 hover:text-white flex items-center py-6 border-b-2 border-transparent hover:border-white text-sm lg:text-base font-medium transition duration-200">
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

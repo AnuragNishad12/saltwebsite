@@ -1,3 +1,4 @@
+import Category from "../Category/Category";
 import ProfessionalSlider from "../Slider/ProfessionalSlider";
 import Navbar from "./Navbar";
 
@@ -16,6 +17,7 @@ return(
 <>
 <Navbar/>
 <ProfessionalSlider/>
+<Category/>
 </>
 );
 
