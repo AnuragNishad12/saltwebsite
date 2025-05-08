@@ -1,68 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function FruitFilter() {
-  const fruits = [
-    { id: 1, name: 'Orange', type: 'Citrus' },
-    { id: 2, name: 'Strawberry', type: 'Berry' },
-    { id: 3, name: 'Mango', type: 'Tropical' },
-    { id: 4, name: 'Lime', type: 'Citrus' },
-    { id: 5, name: 'Blueberry', type: 'Berry' }
-  ];
+const [categories,setCategories] = useState([])
+const [Loading,setLoading] = useState(true);
 
-  const [selectedTypes, setSelectedTypes] = useState([]);
+useEffect(()=>{
 
-  const handleCheckboxChange = (type) => {
-    if (selectedTypes.includes(type)) {
-      setSelectedTypes(selectedTypes.filter(t => t !== type));
-    } else {
-      setSelectedTypes([...selectedTypes, type]);
-    }
-  };
+  const fetchData =async()=>{
+    try {
+      const response = await fetch("http://localhost:5000/api/allCategory",{
+        method:'GET',
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = await response.json();
+      console.log(data);
+      setCategories(data.message);
+      console.log("MyData",data.message);
+      setLoading(false);
+     } catch (error) {
+      console.log("Error",error);
+      setLoading(false);
+     }
+  }
 
-  const filteredFruits =
-    selectedTypes.length === 0
-      ? fruits
-      : fruits.filter(fruit => selectedTypes.includes(fruit.type));
+  fetchData();
+},[]);
 
-  return (
-    <div>
-      <h2>Fruit Filter</h2>
+if(Loading) return <p>Loading Data.....</p>;
+ 
+return(
+<>
+{
+  categories.map((data)=>{
+    return(
+      <div key={data._id}>
+      <h1>{data.CategoryName}</h1>
+     </div>
+    )
+  })
+};
 
-      <label>
-        <input
-          type="checkbox"
-          value="Citrus"
-          onChange={() => handleCheckboxChange('Citrus')}
-          checked={selectedTypes.includes('Citrus')}
-        />
-        Citrus
-      </label>
-
-      <label>
-        <input
-          type="checkbox"
-          value="Berry"
-          onChange={() => handleCheckboxChange('Berry')}
-          checked={selectedTypes.includes('Berry')}
-        />
-        Berry
-      </label>
-
-      <label>
-        <input
-          type="checkbox"
-          value="Tropical"
-          onChange={() => handleCheckboxChange('Tropical')}
-          checked={selectedTypes.includes('Tropical')}
-        />
-        Tropical
-      </label>
-
-      <ul>
-        {filteredFruits.map(fruit => (
-          <li key={fruit.id}>{fruit.name} ({fruit.type})</li>
-        ))}
-      </ul>
+{
+  categories.map((data)=>(
+    <div key={data._id}>
+      <h1>{data.CategoryName}</h1>
     </div>
-  );
+  ))
 }
+
+</>
+);
+ 
+}
+
+

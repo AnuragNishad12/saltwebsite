@@ -2,17 +2,7 @@ import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 
 export default function ResponsiveCategoryNavigation() {
-
-
-
-  
-  // Sample categories - replace with your actual data
-  const categories = [
-    { id: 1, name: 'Audio & Tech Gear' },
-    { id: 2, name: 'Gadgets & Accessories' },
-    { id: 3, name: 'Clothing' },
-  ];
-
+  const [categories, setCategories] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,6 +10,29 @@ export default function ResponsiveCategoryNavigation() {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/allCategory');
+        const data = await res.json();
+        if (data.success === "Successful") {
+          // Transform the API data into the format your component expects
+          const formattedCategories = data.message.map((item, index) => ({
+            id: item._id, // or use `index` if needed
+            name: item.CategoryName
+          }));
+          setCategories(formattedCategories);
+        } else {
+          console.error("Failed to load categories:", data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
@@ -41,9 +54,7 @@ export default function ResponsiveCategoryNavigation() {
                   onMouseLeave={() => setActiveItem(null)}
                   onClick={() => setSelectedItem(category.id === selectedItem ? null : category.id)}
                 >
-                  <p className="text-center whitespace-nowrap">
-                    {category.name}
-                  </p>
+                  <p className="text-center whitespace-nowrap">{category.name}</p>
                 </div>
               ))}
             </div>
@@ -75,8 +86,6 @@ export default function ResponsiveCategoryNavigation() {
                   }`}
                   onClick={() => {
                     setSelectedItem(category.id === selectedItem ? null : category.id);
-                    // Optionally close the menu after selection on mobile
-                    // setMobileMenuOpen(false);
                   }}
                 >
                   {category.name}
@@ -95,7 +104,7 @@ export default function ResponsiveCategoryNavigation() {
           </h2>
           <p className="mt-3 text-gray-600">
             {selectedItem 
-              ? `You are currently viewing the ${categories.find(cat => cat.id === selectedItem)?.name} section.`
+              ? `You are currently viewing the ${categories.find(cat => cat.id === selectedItem)?.name} section.` 
               : 'Please select a category from the navigation menu.'}
           </p>
         </div>

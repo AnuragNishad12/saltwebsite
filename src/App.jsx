@@ -12,8 +12,8 @@ function App() {
   return (
     <>
     <ToastProvider>
-      {/* <HomePage/> */}
-      <FruitList/>
+      <HomePage/>
+      {/* <FruitList/> */}
     {/* <LoginPage/> */}
     {/* <SignUpPage/> */}
     </ToastProvider>
