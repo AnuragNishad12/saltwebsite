@@ -1,58 +1,93 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-export default function FruitFilter() {
-const [categories,setCategories] = useState([])
-const [Loading,setLoading] = useState(true);
+
+
+export default function productdisplay(){
+  const [category,setCategory] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
+  const [product,setProduct] = useState([]);
+
 
 useEffect(()=>{
-
-  const fetchData =async()=>{
+  const handlecategory=async()=>{
     try {
-      const response = await fetch("http://localhost:5000/api/allCategory",{
-        method:'GET',
-        headers:{
-          'Content-Type': 'application/json',
-        }
-      });
-      const data = await response.json();
+      const res =await fetch("http://localhost:5000/api/allCategory");
+      const data = await res.json();
       console.log(data);
-      setCategories(data.message);
-      console.log("MyData",data.message);
-      setLoading(false);
-     } catch (error) {
-      console.log("Error",error);
-      setLoading(false);
-     }
+    setCategory(data.message)
+    } catch (error) {
+      console.log(`Error !!!${error}`);
+    }
   }
-
-  fetchData();
+  handlecategory();
 },[]);
 
-if(Loading) return <p>Loading Data.....</p>;
- 
+const selectedCategory = category.find((cat)=>cat._id === selectedId);
+
+const handleClick = (id)=>{
+  setSelectedId(id);
+}
+
+const handleCategoryClick=async(categoryId)=>{
+  try {
+    const res =await fetch(`http://localhost:5000/api/products/category/${categoryId}`);
+    const data = await res.json();
+    const mydata = JSON.stringify(data.products);
+    console.log(mydata);
+    if(mydata.length>0){
+      setProduct(data.products);
+    }else{
+      alert("Its Empoty")
+    }
+    
+  
+    console.log(product); 
+  } catch (error) {
+    console.log(`Error !!!${error}`);
+  }
+}
+
 return(
 <>
-{
-  categories.map((data)=>{
-    return(
-      <div key={data._id}>
-      <h1>{data.CategoryName}</h1>
-     </div>
-    )
-  })
-};
+<div>
+
+
+
+
+  {category.map((data)=>(
+  <>
+  <div key={data._id}>
+    <h1>{data.CategoryName}</h1>
+    <button onClick={()=>{
+    handleClick(data._id)
+    handleCategoryClick(data._id);
+    }}>click me !!</button>
+  </div>
+  </>
+  ))}
 
 {
-  categories.map((data)=>(
+  selectedCategory && (
+    <div>
+      selected id:{selectedCategory._id}
+      </div>
+  )
+}
+
+{
+  product.map((data)=>(
+    <>
     <div key={data._id}>
-      <h1>{data.CategoryName}</h1>
+      <h1>{data.name}</h1>
     </div>
+    </>
   ))
 }
 
+
+</div>
 </>
 );
- 
+
+
 }
-
-
