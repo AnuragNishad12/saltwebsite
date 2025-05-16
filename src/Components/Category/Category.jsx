@@ -193,25 +193,24 @@ const navigate = useNavigate();
     return true;
   };
 
-  // Handle opening the modal for a product
+
   const handleOpenModal = (product) => {
     if (checkUserToken()) {
       setSelectedProduct(product);
-      setQuantity(1); // Reset quantity when selecting a new product
+      setQuantity(1); 
       setIsOpen(true);
     }
   };
 
-  // Function to add the product to cart
   const addToCart = async () => {
     if (!selectedProduct) return;
     
-    // Double-check token before API call
+    
     if (!checkUserToken()) return;
     
     try {
       const token = localStorage.getItem("token");
-      // Update with your actual API endpoint
+    
       const response = await fetch('http://yusuf.pollai.in/api/addCart', {
         method: 'POST',
         headers: {
@@ -268,10 +267,10 @@ const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
-      {/* Category Navigation */}
+    
       <div className="bg-gradient-to-r from-orange-600 to-orange-500 shadow-lg">
         <div className="container mx-auto px-4">
-          {/* Desktop Navigation */}
+        
           <div className="hidden md:flex justify-center py-3">
             <div className="flex bg-orange-400/30 rounded-xl backdrop-blur-sm">
               {categories && categories.length > 0 ? categories.map((category) => (
@@ -296,7 +295,7 @@ const navigate = useNavigate();
             </div>
           </div>
 
-          {/* Mobile Navigation Toggle */}
+        
           <div className="md:hidden flex justify-between items-center py-3">
             <p className="text-white font-medium">Categories</p>
             <button 
@@ -308,7 +307,7 @@ const navigate = useNavigate();
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
+      
         {mobileMenuOpen && (
           <div className="md:hidden container mx-auto px-4 pb-3">
             <div className="bg-orange-400/40 backdrop-blur-sm rounded-xl overflow-hidden">
@@ -332,7 +331,7 @@ const navigate = useNavigate();
         )}
       </div>
 
-      {/* Content Area */}
+  
       <div className="container mx-auto p-4">
         <div className="bg-white rounded-lg shadow-md p-6 mt-8">
           <p className="mb-6 text-gray-600">
