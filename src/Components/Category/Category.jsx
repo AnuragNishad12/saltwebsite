@@ -24,6 +24,7 @@ const navigate = useNavigate();
   const maxPriceRef = useRef(null);
    const [quantity, setQuantity] = useState(1);
    const[isOpen,setIsOpen]= useState(false)
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -180,22 +181,69 @@ const navigate = useNavigate();
   };
 
 
-//    function CheckTheToken(productId){
-//   const token = localStorage.getItem("token");
+  const checkUserToken = () => {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+      toast.error("Please Login....");
+      navigate('/Login');
+      return false;
+    }
+    
+    return true;
+  };
 
-//   if(!token){
-//     toast.error("Please Login....");
-//     navigate('/Login');
-//   }
+  // Handle opening the modal for a product
+  const handleOpenModal = (product) => {
+    if (checkUserToken()) {
+      setSelectedProduct(product);
+      setQuantity(1); // Reset quantity when selecting a new product
+      setIsOpen(true);
+    }
+  };
 
-// alert("Product Added to the cart")
-//    }
+  // Function to add the product to cart
+  const addToCart = async () => {
+    if (!selectedProduct) return;
+    
+    // Double-check token before API call
+    if (!checkUserToken()) return;
+    
+    try {
+      const token = localStorage.getItem("token");
+      // Update with your actual API endpoint
+      const response = await fetch('http://yusuf.pollai.in/api/addCart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          productId: selectedProduct._id,
+          quantity: quantity
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+      
+        toast.success("Product added to the cart");
+        setIsOpen(false);
+      } else {
+        
+        toast.error(data.message || "Failed to add product to cart");
+      }
+    } catch (error) {
+      toast.error("Error adding to cart");
+      console.error('Error adding to cart:', error);
+    }
+  };
 
-const increaseQuantity = () => setQuantity((q) => q + 1);
+
+
+  const increaseQuantity = () => setQuantity((q) => q + 1);
   const decreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
-  const handleOpenModal = () => {
-  setIsOpen(true);
-};
 
 
   if (error) {
@@ -469,9 +517,12 @@ const increaseQuantity = () => setQuantity((q) => q + 1);
                                   </p>
                                 )}
                                 
-                                <button onClick={handleOpenModal} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">
-                                  Add to Cart
-                                </button>
+                                 <button 
+                  onClick={() => handleOpenModal(product)} 
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300"
+                >
+                  Add to Cart
+                </button>
                               </div>
                             </div>
                           </div>
@@ -489,47 +540,57 @@ const increaseQuantity = () => setQuantity((q) => q + 1);
               </div>
             </div>
             
-            {isOpen &&(
-              <div
+             {isOpen && selectedProduct && (
+        <div
           className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
           onClick={() => setIsOpen(false)}
         >
           {/* Dialog box */}
           <div
-            className="bg-white rounded-lg p-6 w-64 shadow-lg"
+            className="bg-white rounded-lg p-6 w-80 shadow-lg"
             onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside the dialog
           >
             <h3 className="text-orange-600 font-semibold text-lg mb-4 text-center">
-              Select Quantity
+              {selectedProduct.name}
             </h3>
-            <div className="flex items-center justify-center space-x-4">
+            
+            <div className="mb-4 text-center">
+              <p className="text-gray-700">Price: ₹{selectedProduct.price?.toLocaleString()}</p>
+            </div>
+            
+            <div className="flex items-center justify-center space-x-4 mb-6">
               <button
                 onClick={decreaseQuantity}
-                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded px-3 py-1 text-lg transition-colors duration-200"
+                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200"
               >
                 -
               </button>
-              <span className="text-xl font-semibold text-orange-600">{quantity}</span>
+              <span className="text-xl font-semibold text-orange-600 w-10 text-center">{quantity}</span>
               <button
                 onClick={increaseQuantity}
-                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded px-3 py-1 text-lg transition-colors duration-200"
+                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded-full w-8 h-8 flex items-center justify-center transition-colors duration-200"
               >
                 +
               </button>
             </div>
-            <button
-              onClick={() => {
-                // handle add to cart with quantity here
-                setIsOpen(false);
-                alert(`Added ${quantity} items to cart!`);
-              }}
-              className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white rounded py-2 font-medium transition-colors duration-300"
-            >
-              Confirm
-            </button>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={addToCart}
+                className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors duration-300"
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
-            )}
+      )}
 
           </div>
         </div>
