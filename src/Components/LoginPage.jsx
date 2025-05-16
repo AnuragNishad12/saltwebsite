@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useToast } from '../Components/ToastComponents/ToastProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const toast = useToast();
     
-    const [formData, setFormData] = useState({
-      email: '',
-      mobile: ''
-    });
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''  // Changed from mobile to password
+  });
 
   const [loading, setLoading] = useState(false);
   
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,10 +21,8 @@ export default function LoginPage() {
     });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     
     setLoading(true);
     
@@ -33,14 +32,13 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        //this is the actual data im sendintg okay 
+        // Updated to send email and password instead of email and mobile
         body: JSON.stringify({
           email: formData.email,
-          mobile: formData.mobile
+          password: formData.password  // Changed from mobile to password
         }),
       });
       
-      //this is used for getting the data from the api 
       const data = await response.json();
       console.log(data);
       
@@ -48,13 +46,18 @@ export default function LoginPage() {
         toast.success('Login successful!');
         setFormData({
           email: '',
-          mobile: ''
+          password: ''  // Changed from mobile to password
         });
         
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        navigate('/');
       } else {
         toast.error(data.message || 'Login failed');
+
+        setTimeout(() => {
+          navigate('/Registeration');
+        }, 1500);
       }
     } catch (error) {
       toast.error('Server error. Please try again later.');
@@ -63,10 +66,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
- 
-
-  
 
   return (
     <>
@@ -85,8 +84,6 @@ export default function LoginPage() {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4 rounded-md shadow-sm">
-          
-            
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
@@ -105,24 +102,21 @@ export default function LoginPage() {
             </div>
             
             <div>
-              <label htmlFor="mobile" className="block text-sm font-medium text-gray-700">
-                Mobile Number
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Password
               </label>
               <input
-                id="mobile"
-                name="mobile"
-                type="tel"
+                id="password"
+                name="password"
+                type="password"  
+                autoComplete="current-password"
                 required
-                value={formData.mobile}
+                value={formData.password}  
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                placeholder="+1234567890"
+                placeholder="••••••••"
               />
             </div>
-            
-            
-            
-            
           </div>
 
           <div>
@@ -133,14 +127,17 @@ export default function LoginPage() {
                 loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
               }`}
             >
-              {loading ? 'Processing...' : 'Login In'}
+              {loading ? 'Processing...' : 'Log In'}
             </button>
           </div>
           
           <div className="flex items-center justify-center">
             <div className="text-sm">
-              <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                Dont Have Account ? Sign Up
+              <a 
+                href="/Registeration" 
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Don't have an account? Sign Up
               </a>
             </div>
           </div>

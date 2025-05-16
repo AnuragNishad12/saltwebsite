@@ -1,7 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { Menu } from 'lucide-react';
+import { useToast } from '../ToastComponents/ToastProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResponsiveCategoryNavigation() {
+const navigate = useNavigate();
+  const toast = useToast();
   const [categories, setCategories] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -18,6 +22,8 @@ export default function ResponsiveCategoryNavigation() {
   const [isDragging, setIsDragging] = useState(false);
   const minPriceRef = useRef(null);
   const maxPriceRef = useRef(null);
+   const [quantity, setQuantity] = useState(1);
+   const[isOpen,setIsOpen]= useState(false)
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -75,15 +81,15 @@ export default function ResponsiveCategoryNavigation() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`http://localhost:5000/api/products/category/${categoryId}`);
+      const res = await fetch(`http://yusuf.pollai.in/api/products/category/${categoryId}`);
       const data = await res.json();
-
+       console.log("Data of products",data);
       if (data && data.success === "success") {
         const productsList = Array.isArray(data.products) ? data.products : [];
         setProducts(productsList);
         setFilteredProducts(productsList);
         
-        // Find max price for the range slider
+       
         if (productsList.length > 0) {
           const maxPrice = Math.max(...productsList.map(p => p.price || 0));
           const roundedMaxPrice = Math.ceil(maxPrice / 1000) * 1000; // Round to nearest thousand
@@ -172,6 +178,25 @@ export default function ResponsiveCategoryNavigation() {
     setCurrentPriceRange(newRange);
     setFilteredProducts(products);
   };
+
+
+//    function CheckTheToken(productId){
+//   const token = localStorage.getItem("token");
+
+//   if(!token){
+//     toast.error("Please Login....");
+//     navigate('/Login');
+//   }
+
+// alert("Product Added to the cart")
+//    }
+
+const increaseQuantity = () => setQuantity((q) => q + 1);
+  const decreaseQuantity = () => setQuantity((q) => (q > 1 ? q - 1 : 1));
+  const handleOpenModal = () => {
+  setIsOpen(true);
+};
+
 
   if (error) {
     return (
@@ -444,7 +469,7 @@ export default function ResponsiveCategoryNavigation() {
                                   </p>
                                 )}
                                 
-                                <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">
+                                <button onClick={handleOpenModal} className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300">
                                   Add to Cart
                                 </button>
                               </div>
@@ -463,6 +488,49 @@ export default function ResponsiveCategoryNavigation() {
                 )}
               </div>
             </div>
+            
+            {isOpen &&(
+              <div
+          className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+          onClick={() => setIsOpen(false)}
+        >
+          {/* Dialog box */}
+          <div
+            className="bg-white rounded-lg p-6 w-64 shadow-lg"
+            onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside the dialog
+          >
+            <h3 className="text-orange-600 font-semibold text-lg mb-4 text-center">
+              Select Quantity
+            </h3>
+            <div className="flex items-center justify-center space-x-4">
+              <button
+                onClick={decreaseQuantity}
+                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded px-3 py-1 text-lg transition-colors duration-200"
+              >
+                -
+              </button>
+              <span className="text-xl font-semibold text-orange-600">{quantity}</span>
+              <button
+                onClick={increaseQuantity}
+                className="bg-orange-200 hover:bg-orange-300 text-orange-700 font-bold rounded px-3 py-1 text-lg transition-colors duration-200"
+              >
+                +
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                // handle add to cart with quantity here
+                setIsOpen(false);
+                alert(`Added ${quantity} items to cart!`);
+              }}
+              className="mt-6 w-full bg-orange-500 hover:bg-orange-600 text-white rounded py-2 font-medium transition-colors duration-300"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+            )}
+
           </div>
         </div>
       </div>
