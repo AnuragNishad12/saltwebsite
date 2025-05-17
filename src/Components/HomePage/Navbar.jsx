@@ -2,13 +2,22 @@ import logo from '../../assets/logosalte.jpg'
 import person from '../../assets/person.png'
 import cart from '../../assets/cart.png'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+
+    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+    
+   
+
+    
+
+
 
     return (
         <>
@@ -41,8 +50,9 @@ export default function Navbar() {
                             />
                             <p className="text-sm md:text-base transition-transform transform hover:scale-110 duration-300">Profile</p>
                         </div>
-                        <div className="flex flex-col items-center justify-center h-[80px] md:h-[100px] w-[80px] md:w-[100px] cursor-pointer">
+                        <div onClick={()=>navigate('/MyCart')} className="flex flex-col items-center justify-center h-[80px] md:h-[100px] w-[80px] md:w-[100px] cursor-pointer">
                             <img
+                            
                                 src={cart}
                                 alt="Cart"
                                 className="w-[30px] md:w-[40px] h-[30px] md:h-[40px] transition-transform transform hover:scale-110 duration-300"

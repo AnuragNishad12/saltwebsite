@@ -33,7 +33,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('http://yusuf.pollai.in/api/allCategory');
+        const res = await fetch('http://localhost:5000/api/allCategory');
         const data = await res.json();
         if (data.success === "Successful") {
           const formattedCategories = Array.isArray(data.message) ? data.message.map((item) => ({
@@ -82,7 +82,7 @@ const navigate = useNavigate();
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`http://yusuf.pollai.in/api/products/category/${categoryId}`);
+      const res = await fetch(`http://localhost:5000/api/products/category/${categoryId}`);
       const data = await res.json();
        console.log("Data of products",data);
       if (data && data.success === "success") {
@@ -211,7 +211,7 @@ const navigate = useNavigate();
     try {
       const token = localStorage.getItem("token");
     
-      const response = await fetch('http://yusuf.pollai.in/api/addCart', {
+      const response = await fetch('http://localhost:5000/api/addCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
