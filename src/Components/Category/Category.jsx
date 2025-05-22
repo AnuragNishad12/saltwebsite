@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Menu } from 'lucide-react';
+import { AwardIcon, Menu } from 'lucide-react';
 import { useToast } from '../ToastComponents/ToastProvider';
 import { useNavigate } from 'react-router-dom';
 
@@ -202,16 +202,95 @@ const navigate = useNavigate();
     }
   };
 
+  // const addToCart = async () => {
+  //   if (!selectedProduct) return;
+    
+    
+  //   if (!checkUserToken()) return;
+    
+  //   try {
+  //     const token = localStorage.getItem("token");
+    
+  //     const response = await fetch('http://localhost:5000/api/addCart', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${token}`
+  //       },
+  //       body: JSON.stringify({
+  //         productId: selectedProduct._id,
+  //         quantity: quantity
+  //       }),
+  //     });
+      
+  //     const data = await response.json();
+      
+  //     if (response.ok) {
+      
+  //       toast.success("Product added to the cart");
+  //       setIsOpen(false);
+  //     } else {
+        
+  //       toast.error(data.message || "Failed to add product to cart");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Error adding to cart");
+  //     console.error('Error adding to cart:', error);
+  //   }
+  // };
+
+  const refreshAccessToken = async()=>{
+    try{
+
+      const response = await fetch("http://localhost:5000/api/auth/RefreshToken",{
+        method:"POST",
+        credentials:"include"
+      })
+
+    const data = await response.json();
+    if(response.ok && data.token){
+      localStorage.setItem("token",data.token);
+      return data.token;
+    }else{
+      throw new Error("Unable to refresh Token")
+    }
+
+
+    }catch(error){
+   console.error(`Error refreshing token: ${error}`)
+   toast.error("Session Expired. Please Login Again")
+   localStorage.removeItem("token")
+   navigate("/Login")
+   return null;
+    }
+  }
+
   const addToCart = async () => {
-    if (!selectedProduct) return;
-    
-    
-    if (!checkUserToken()) return;
-    
-    try {
-      const token = localStorage.getItem("token");
-    
-      const response = await fetch('http://localhost:5000/api/addCart', {
+  if (!selectedProduct) return;
+  if (!checkUserToken()) return;
+
+  let token = localStorage.getItem("token");
+
+  try {
+    let response = await fetch('http://localhost:5000/api/addCart', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        productId: selectedProduct._id,
+        quantity: quantity
+      }),
+    });
+
+    // If token is expired
+    if (response.status === 401) {
+      token = await refreshAccessToken();
+      if (!token) return;
+
+      // Retry request with new token
+      response = await fetch('http://localhost:5000/api/addCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -222,22 +301,22 @@ const navigate = useNavigate();
           quantity: quantity
         }),
       });
-      
-      const data = await response.json();
-      
-      if (response.ok) {
-      
-        toast.success("Product added to the cart");
-        setIsOpen(false);
-      } else {
-        
-        toast.error(data.message || "Failed to add product to cart");
-      }
-    } catch (error) {
-      toast.error("Error adding to cart");
-      console.error('Error adding to cart:', error);
     }
-  };
+
+    const data = await response.json();
+
+    if (response.ok) {
+      toast.success("Product added to the cart");
+      setIsOpen(false);
+    } else {
+      toast.error(data.message || "Failed to add product to cart");
+    }
+  } catch (error) {
+    toast.error("Error adding to cart");
+    console.error('Error adding to cart:', error);
+  }
+};
+
 
 
 
