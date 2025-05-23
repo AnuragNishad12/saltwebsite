@@ -33,7 +33,7 @@ const navigate = useNavigate();
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('https://yusuf.pollai.in/api/allCategory');
+        const res = await fetch('http://yusuf.pollai.in/api/allCategory');
         const data = await res.json();
         if (data.success === "Successful") {
           const formattedCategories = Array.isArray(data.message) ? data.message.map((item) => ({
@@ -82,7 +82,7 @@ const navigate = useNavigate();
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`https://yusuf.pollai.in/api/products/category/${categoryId}`);
+      const res = await fetch(`http://yusuf.pollai.in/api/products/category/${categoryId}`);
       const data = await res.json();
        console.log("Data of products",data);
       if (data && data.success === "success") {
@@ -242,7 +242,7 @@ const navigate = useNavigate();
   const refreshAccessToken = async()=>{
     try{
 
-      const response = await fetch("https://yusuf.pollai.in/api/auth/RefreshToken",{
+      const response = await fetch("http://yusuf.pollai.in/api/auth/RefreshToken",{
         method:"POST",
         credentials:"include"
       })
@@ -272,7 +272,7 @@ const navigate = useNavigate();
   let token = localStorage.getItem("token");
 
   try {
-    let response = await fetch('https://yusuf.pollai.in/api/addCart', {
+    let response = await fetch('http://yusuf.pollai.in/api/addCart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -290,7 +290,7 @@ const navigate = useNavigate();
       if (!token) return;
 
       // Retry request with new token
-      response = await fetch('https://yusuf.pollai.in/api/addCart', {
+      response = await fetch('http://yusuf.pollai.in/api/addCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

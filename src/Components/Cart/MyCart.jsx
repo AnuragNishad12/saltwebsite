@@ -11,7 +11,7 @@ const MyCart = () => {
       try {
         setLoading(true);
         const token = localStorage.getItem("token");
-        const res = await fetch('https://yusuf.pollai.in/api/GetCartItems', {
+        const res = await fetch('http://yusuf.pollai.in/api/GetCartItems', {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
