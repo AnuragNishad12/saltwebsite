@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useToast } from '../ToastComponents/ToastProvider.jsx';
+import { useNavigate } from "react-router-dom";
 
 const MyCart = () => {
+  const navigate = useNavigate();
   const toast = useToast();
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -100,7 +102,7 @@ const MyCart = () => {
       ));
 
       const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/CartUpdate/${itemId}`, {
+     let res =  await fetch(`http://localhost:5000/api/updateQuantity/${itemId}`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -108,9 +110,63 @@ const MyCart = () => {
         },
         body: JSON.stringify({ quantity: newQuantity })
       });
+
+      let data = await res.json();
+      
+      if(res.ok){
+         console.log(data);
+        
+      }else{
+        toast.error(data.message)
+          navigate("/Login")
+      }
+
+
+
     } catch (error) {
       console.error('Quantity update error:', error);
       toast.error("Failed to update quantity");
+    }
+  };
+
+   const decreaseQantity = async(itemId, newQuantity) => {
+    if (newQuantity < 1) return;
+    
+    try {
+      // Update local state first for immediate UI feedback
+      setCart(prev => prev.map(item => 
+        item._id === itemId ? { ...item, quantity: newQuantity } : item
+      ));
+
+      const token = localStorage.getItem("token");
+      const res = await fetch(`http://localhost:5000/api/decreaseQuantity/${itemId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+
+      const data = await res.json();
+      
+      if (res.ok) {
+        console.log(data);
+      } else {
+        // Revert the local state change if API call failed
+        setCart(prev => prev.map(item => 
+          item._id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+        ));
+        toast.error(data.message || "Failed to decrease quantity");
+        navigate("/Login");
+      }
+    } catch (error) {
+      // Revert the local state change if there's an exception
+      setCart(prev => prev.map(item => 
+        item._id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+      console.log(`Exception Problem ${error}`);
+      toast.error("Failed to decrease quantity");
     }
   };
 
@@ -220,7 +276,7 @@ const MyCart = () => {
                           <span className="text-gray-600 text-sm font-medium">Quantity:</span>
                           <div className="flex items-center border border-orange-200 rounded-md">
                             <button
-                              onClick={() => handleQuantityUpdate(item._id, item.quantity - 1)}
+                              onClick={() => decreaseQantity(item._id, item.quantity - 1)}
                               className="p-1 hover:bg-orange-50 transition-colors duration-200 text-orange-600"
                               disabled={item.quantity <= 1 || removingItems.has(item._id)}
                             >

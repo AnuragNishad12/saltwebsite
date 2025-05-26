@@ -7,6 +7,7 @@ import HomePage from './Components/HomePage/HomePage'
 import FruitList from './Components/Learning/FruitList'
 import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import MyCart from './Components/Cart/MyCart'
+import ContactUsPage from './Components/Navbar/ContactUs';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path='/Login' element={ <ToastProvider><LoginPage/></ToastProvider>}/>
            <Route path='/Registeration' element={<ToastProvider><SignUpPage/></ToastProvider>}/>
             <Route path='/MyCart' element={<ToastProvider><MyCart/></ToastProvider>}/>
+            <Route path='/ContactUsPage'element={<ToastProvider><ContactUsPage/></ToastProvider>}/>
       </Routes>
     </Router>
    

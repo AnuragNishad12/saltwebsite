@@ -3,6 +3,7 @@ import person from '../../assets/person.png'
 import cart from '../../assets/cart.png'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import ContactUsPage from '../Navbar/ContactUs';
 
 export default function Navbar() {
 
@@ -15,15 +16,15 @@ export default function Navbar() {
 
     return (
         <>
-            {/* Main Navbar Container */}
+        
             <div className="w-full flex flex-col md:flex-row h-auto md:h-16 lg:h-20">
-                {/* Left Side - Logo, Profile, Cart, Search */}
+              
                 <div className="w-full md:w-1/2 flex flex-col md:flex-row items-center px-4 py-2 md:py-0">
-                    {/* Logo */}
+              
                     <div className="flex items-center justify-between w-full md:w-auto">
                         <img src={logo} alt="Logo" className="h-10 md:h-12 lg:h-14" />
                         
-                        {/* Mobile Menu Button */}
+                   
                         <button 
                             className="md:hidden p-2 focus:outline-none"
                             onClick={toggleMenu}
@@ -34,7 +35,6 @@ export default function Navbar() {
                         </button>
                     </div>
 
-                    {/* Profile and Cart Icons - Hidden on mobile unless menu is open */}
                     <div className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex flex-row items-center justify-center w-full md:w-auto py-2 md:py-0`}>
                         <div className="flex flex-col items-center justify-center h-12 md:h-16 w-16 md:w-20 cursor-pointer">
                             <img 
@@ -54,7 +54,6 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* Search Bar */}
                     <div className={`${isMenuOpen ? 'flex' : 'hidden'} md:flex w-full md:w-[250px] lg:w-[300px] h-8 md:h-10 items-center rounded-full overflow-hidden bg-white shadow-lg p-1 my-2 md:my-0 md:ml-auto md:mr-4 lg:mr-6`}>
                         <input
                             type="text"
@@ -68,9 +67,9 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Right Side - Professional Black Section */}
+             
                 <div className="w-full md:w-1/2 bg-black">
-                    {/* Mobile black navbar (collapses) */}
+                    
                     <div className={`${isMenuOpen ? 'flex' : 'hidden'} md:hidden flex-col space-y-1 py-3 px-6`}>
                         <a href="#" className="text-gray-300 hover:text-white text-sm font-medium flex items-center py-2 transition duration-200">
                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -119,7 +118,7 @@ export default function Navbar() {
                                 </svg>
                                 About Us
                             </a>
-                            <a href="#" className="text-gray-300 hover:text-white flex items-center py-4 border-b-2 border-transparent hover:border-white text-xs font-medium transition duration-200">
+                            <a  onClick={()=>{navigate('/ContactUsPage')}} className="text-gray-300 hover:text-white flex items-center py-4 border-b-2 border-transparent hover:border-white text-xs font-medium transition duration-200">
                                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
