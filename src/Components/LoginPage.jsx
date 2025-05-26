@@ -27,15 +27,15 @@ export default function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await fetch('http://yusuf.pollai.in/api/auth/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        // Updated to send email and password instead of email and mobile
+        
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password  // Changed from mobile to password
+          password: formData.password  
         }),
       });
       

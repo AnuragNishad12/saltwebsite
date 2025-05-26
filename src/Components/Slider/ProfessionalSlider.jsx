@@ -67,7 +67,7 @@ export default function ProfessionalSlider() {
   return (
     <div className="relative w-full overflow-hidden shadow-xl">
 
-      <div className="relative h-96 md:h-128">
+      <div className="relative h-60 md:h-100">
         {sliderData.map((slide, index) => (
           <div
             key={slide.id}
@@ -93,10 +93,10 @@ export default function ProfessionalSlider() {
             
         
             <div className="absolute right-0 flex flex-col justify-center w-full h-full px-6 text-white md:w-1/2 md:px-12">
-              <h2 className="mb-2 text-3xl font-bold tracking-tight md:text-5xl font-display">
+              <p className="mb-2 text-xs font-bold tracking-tight md:text-3xl font-display">
                 {slide.headline}
-              </h2>
-              <p className="mb-6 text-lg md:text-xl text-white/90">
+              </p>
+              <p className="mb-6 text-xs md:text-xl text-white/90">
                 {slide.subheading}
               </p>
               <div>
