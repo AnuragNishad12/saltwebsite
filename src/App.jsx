@@ -8,6 +8,7 @@ import FruitList from './Components/Learning/FruitList'
 import { BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import MyCart from './Components/Cart/MyCart'
 import ContactUsPage from './Components/Navbar/ContactUs';
+import DealsOffersPage from './Components/DealsAndOffers/DealsOffersPage'
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
            <Route path='/Registeration' element={<ToastProvider><SignUpPage/></ToastProvider>}/>
             <Route path='/MyCart' element={<ToastProvider><MyCart/></ToastProvider>}/>
             <Route path='/ContactUsPage'element={<ToastProvider><ContactUsPage/></ToastProvider>}/>
+            <Route path='/DealsandOffers' element={<ToastProvider><DealsOffersPage/></ToastProvider>}/>
       </Routes>
     </Router>
    
